@@ -117,16 +117,7 @@ h1, h2, h3, h4, .logo {
     overflow: hidden; /* Keeps the video from spilling out */
 }
 
-.hero-video-container {
-        /* Keep your existing positioning rules (position, top, left, transform, etc.) */
-        
-        width: 100%;
-        height: auto; /* Removes any forced heights like 100vh */
-        aspect-ratio: 16 / 9; /* Locks it into a perfect cinematic widescreen frame */
-        max-height: 100vh; /* Ensures it never gets taller than the user's laptop screen */
-    }
-
-/* Dark overlay so the white text is readable */
+/* Styled Container Frame for the Hero Video */
 .hero-video-container {
     position: absolute;
     top: 90px; /* Pushes the top edge down safely below your navigation bar */
@@ -142,11 +133,17 @@ h1, h2, h3, h4, .logo {
     mask-image: radial-gradient(white, black);
 }
 
-.hero-bg-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    border-radius: 30px; /* Adds a second layer of rounding directly to the video to be completely bulletproof */
+/* Vimeo Background Iframe Optimization */
+.hero-video-container iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw; /* This maintains a 16:9 cinematic aspect ratio constraint */
+    min-height: 100vh;
+    min-width: 177.77vh; /* 16/9 aspect ratio fallback */
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Prevents users from accidentally pausing the background */
 }
 
 .hero-content {
@@ -178,13 +175,13 @@ section {
 }
 
 /* About Section */
-/* About Section */
 .about-logo {
     display: block;
     margin: 0 auto 1.5rem auto; /* Centers the logo and adds space below it */
     max-width: 80px; /* Keeps it small and elegant; adjust this number if needed */
     height: auto; /* Ensures the image doesn't stretch weirdly */
 }
+
 .about-text {
     max-width: 800px;
     margin: 0 auto;
@@ -195,11 +192,10 @@ section {
 
 /* Video Work Section */
 .category-title {
+    font-family: var(--font-heading);
     font-size: 1.5rem; /* Makes the title significantly bigger */
     margin-top: 5rem; /* Creates a large, elegant gap between the previous collection and this new title */
     margin-bottom: 1.5rem; /* Space between the title and its own videos below */
-    
-    /* (Make sure to keep your existing font-family and other styling here if you have any!) */
 }
 
 /* This keeps the very FIRST category from being pushed too far down from your main heading */
@@ -207,26 +203,17 @@ section {
     margin-top: 2rem; 
 }
 
-.video-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 3rem;
-}
-
 .video-card {
     display: flex;
     flex-direction: column;
 }
 
-/* Placeholder for 16:9 Video Embeds */
+/* Container for 16:9 Video Embeds */
 .video-embed-placeholder {
     position: relative;
     width: 100%;
     padding-top: 56.25%; /* 16:9 Aspect Ratio */
     background-color: #e8e6e1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin-bottom: 1.5rem;
 }
 
@@ -256,9 +243,7 @@ section {
 }
 
 .couple-name {
-    /* Switches the font to Inter */
     font-family: 'Inter', system-ui, -apple-system, sans-serif; 
-    
     font-size: 1.2rem; 
     font-weight: 500; /* Medium weight looks incredibly clean in Inter */
     letter-spacing: 0.5px;
@@ -268,22 +253,12 @@ section {
 
 .video-desc {
     font-style: italic; /* This turns the description text into italics */
-    
-    /* Optional additions to match your clean vibe: */
     font-size: 0.9rem;  /* Slightly scales down the text size */
     color: #666666;     /* Mutes the color slightly so it doesn't distract from the title */
     margin-top: 0.25rem; /* Adds a tiny bit of space between the couple's name and this description */
 }
 
 /* Contact Section */
-.contact-subtitle {
-    text-align: center;
-    margin-bottom: 3rem;
-    font-size: 1.1rem;
-    color: var(--accent-color);
-}
-
-/* Contact Section Redesign */
 .contact-subtitle {
     text-align: center;
     margin-bottom: 4rem;
@@ -297,14 +272,6 @@ section {
     gap: 2rem;
     max-width: 900px;
     margin: 0 auto;
-}
-
-/* Switches to a side-by-side layout on tablets and laptops */
-@media (min-width: 768px) {
-    .contact-options {
-        flex-direction: row;
-        gap: 3rem;
-    }
 }
 
 .contact-card {
@@ -422,7 +389,55 @@ footer {
     transform: translateY(0);
 }
 
-/* Responsive Media Queries */
+/* The Horizontal Scrolling Track */
+.video-carousel {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* Forces cards on ONE single row */
+    overflow-x: auto !important; /* Enables horizontal swiping */
+    overflow-y: hidden;
+    gap: 2rem; /* Nice clean spacing between cards */
+    padding-bottom: 2rem; 
+    width: 100%;
+    
+    /* App-like scroll snapping layout rules */
+    scroll-snap-type: x mandatory; 
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* Hides scrollbars for Chrome/Safari */
+.video-carousel::-webkit-scrollbar {
+    display: none; 
+}
+
+/* Individual Video Cards - Base Width Configurations */
+.video-card {
+    flex: 0 0 85% !important; 
+    width: 85% !important;
+    min-width: 85% !important; /* Bulletproof lock to prevent iframes from crushing the container width */
+    scroll-snap-align: start; 
+    box-sizing: border-box;
+}
+
+/* Media Queries for Tablets and Laptops */
+@media (min-width: 768px) {
+    /* Side-by-side Contact Cards */
+    .contact-options {
+        flex-direction: row;
+        gap: 3rem;
+    }
+
+    /* Video Card layout adjustments for screens larger than Mobile */
+    .video-card {
+        flex: 0 0 40% !important; 
+        width: 40% !important;
+        min-width: 40% !important;
+    }
+}
+
+/* Mobile-Specific Overrides (Max-Width Screen Boundary Rules) */
 @media (max-width: 768px) {
     .hamburger {
         display: flex;
@@ -453,59 +468,42 @@ footer {
         font-size: 1.2rem;
     }
 
-    /* Hamburger Animation */
+    /* Hamburger Animation Configuration rules */
     .toggle .line1 { transform: rotate(-45deg) translate(-5px, 5px); }
     .toggle .line2 { opacity: 0; }
     .toggle .line3 { transform: rotate(45deg) translate(-5px, -5px); }
 
-    .video-grid {
-        grid-template-columns: 1fr;
-    }
-    /* Mobile Hero Restructure */
+    /* Mobile Hero Structural Split Optimization */
     .hero {
         height: auto;
         min-height: 100vh;
-        padding: 160px 0 3rem 0; /* Reduced the top padding */
+        padding: 160px 0 3rem 0;
         flex-direction: column;
-        justify-content: flex-start; /* This pulls the content up instead of centering it in the void */
+        justify-content: flex-start; 
         gap: 2rem;
     }
 
     .hero-content {
-        display: contents; /* Magical CSS that lets us reorder the children */
-        color: var(--text-color); /* Switch text back to dark */
+        display: contents; /* Allows pure re-ordering control */
     }
 
     .hero-title-top {
         order: 1;
         padding: 0 2rem;
+        color: var(--text-color); /* Swapped back to dark theme text for mobile */
     }
 
+    /* Mobile Iframe Hero Frame Config */
     .hero-video-container {
         order: 2;
         position: relative;
-        width: 100%;
-        padding-top: 56.25%; /* Forces 16:9 ratio */
-        height: 0;
-        z-index: 1;
-    }
-
-    .hero-bg-video {
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
-
-    .hero-video-container {
-        order: 2;
-        position: relative;
-        top: 0; /* Resets the inherited desktop value */
-        left: 0; /* Resets the inherited desktop value */
-        transform: none; /* Resets the inherited desktop value */
+        top: 0; 
+        left: 0; 
+        transform: none; 
         width: 90%; 
         margin: 0 auto; 
-        padding-top: 50.625%; 
-        height: 0;
+        aspect-ratio: 16 / 9; /* The cleanest, most foolproof way to lock a widescreen shape */
+        height: auto; 
         z-index: 1;
         border-radius: 24px; 
         overflow: hidden; 
@@ -514,60 +512,26 @@ footer {
         mask-image: radial-gradient(white, black);
     }
 
+    /* Completely resets ALL desktop sizing so the video fits perfectly inside the card */
+    .hero-video-container iframe {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 0 !important;  /* THIS FIXES THE BUG: Overrides the massive desktop width */
+        min-height: 0 !important; /* THIS FIXES THE BUG: Overrides the massive desktop height */
+        transform: none !important; 
+    }
+
     .hero-title-bottom {
         order: 3;
         padding: 0 2rem;
+        color: var(--text-color); /* Swapped back to dark theme text for mobile */
     }
 
     .hero-title-top, .hero-title-bottom {
-        font-size: clamp(2.5rem, 10vw, 4rem); /* Keeps mobile text perfectly sized */
+        font-size: clamp(2.5rem, 10vw, 4rem); 
         letter-spacing: -2px;
     }
-}
-
-/* The Scrolling Track */
-.video-carousel {
-    display: flex;
-    overflow-x: auto; /* Enables horizontal scrolling */
-    gap: 1.5rem; /* Space between each video */
-    padding-bottom: 2rem; /* Breathing room at the bottom */
-    
-    /* Creates a smooth, app-like swiping experience */
-    scroll-snap-type: x mandatory; 
-    
-    /* Hides the scrollbar for a cleaner look */
-    scrollbar-width: none; /* For Firefox */
-    -ms-overflow-style: none; /* For Internet Explorer/Edge */
-}
-
-/* Hides the scrollbar in Chrome/Safari */
-.video-carousel::-webkit-scrollbar {
-    display: none; 
-}
-
-/* Individual Video Cards */
-.video-card {
-    /* Mobile First: Shows 85% of the card so the user sees the next one peeking out and knows to scroll */
-    flex: 0 0 85%; 
-    scroll-snap-align: start; /* Snaps perfectly to the left edge when scrolling */
-}
-
-/* Laptop/Desktop View */
-@media (min-width: 768px) {
-    .video-card {
-        /* Desktop: Shows about 2.5 videos on the screen at a time */
-        flex: 0 0 40%; 
-    }
-}
-
-/* The Gray Video Placeholder (Match your existing styling if you have it) */
-.placeholder-box {
-    aspect-ratio: 16 / 9;
-    background-color: #e5e4df; /* The warm gray from your screenshot */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: #888;
-    margin-bottom: 1rem;
 }
