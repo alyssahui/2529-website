@@ -120,17 +120,23 @@ h1, h2, h3, h4, .logo {
 /* Styled Container Frame for the Hero Video */
 .hero-video-container {
     position: absolute;
-    top: 90px; /* Pushes the top edge down safely below your navigation bar */
+    top: 90px; 
     left: 50%;
-    transform: translateX(-50%); /* Centers it perfectly horizontally */
+    transform: translateX(-50%); 
     width: 95%; 
-    height: calc(100% - 120px); /* Automatically calculates the height to leave breathing room at the bottom */
+    height: calc(100% - 120px); 
     z-index: -1;
     border-radius: 30px; 
     overflow: hidden; 
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1); 
     -webkit-mask-image: radial-gradient(white, black);
     mask-image: radial-gradient(white, black);
+    
+    /* NEW: Fallback Image Settings */
+    background-color: #222222; /* Shows a dark gray immediately while the image loads */
+    background-image: url('cover-photo.jpg'); /* Change this to your exact image file name! */
+    background-size: cover; /* Ensures the image fills the entire card without stretching */
+    background-position: center; /* Keeps the most important part of the image centered */
 }
 
 /* Vimeo Background Iframe Optimization */
