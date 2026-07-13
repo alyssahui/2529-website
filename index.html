@@ -31,7 +31,8 @@
     <header id="home" class="hero section-reveal">
         
         <div class="hero-video-container">
-    <iframe src="https://player.vimeo.com/video/1209339876?background=1&autoplay=1&muted=1&loop=1&controls=0&byline=0&title=0&portrait=0" 
+            <img src="cover-photo.jpg" class="fallback-img" alt="Video Cover">
+    <iframe id="vimeo-bg" src="https://player.vimeo.com/video/1209339876?background=1&autoplay=1&muted=1&loop=1&controls=0&byline=0&title=0&portrait=0" 
             frameborder="0" 
             webkitAllowFullScreen 
             mozallowfullscreen 
@@ -229,6 +230,22 @@
             </p>
         </div>
     </footer>
+
+    <script src="script.js"></script>
+    <script src="https://player.vimeo.com/api/player.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var iframe = document.getElementById('vimeo-bg');
+            var player = new Vimeo.Player(iframe);
+
+            // This listens for the exact moment Vimeo actually starts playing the footage
+            player.on('play', function() {
+                // Instantly triggers the 1.5s CSS fade-in transition
+                iframe.style.opacity = 1; 
+            });
+        });
+    </script>
 
     <script src="script.js"></script>
 </body>

@@ -131,25 +131,27 @@ h1, h2, h3, h4, .logo {
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1); 
     -webkit-mask-image: radial-gradient(white, black);
     mask-image: radial-gradient(white, black);
-    
-    /* NEW: Fallback Image Settings */
-    background-color: #222222; /* Shows a dark gray immediately while the image loads */
-    background-image: url('cover-photo.jpg'); /* Change this to your exact image file name! */
-    background-size: cover; /* Ensures the image fills the entire card without stretching */
-    background-position: center; /* Keeps the most important part of the image centered */
 }
 
-/* Vimeo Background Iframe Optimization */
-.hero-video-container iframe {
+/* This applies the exact same massive scaling math to BOTH the video and the image */
+.hero-video-container iframe,
+.hero-video-container .fallback-img {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 100vw;
-    height: 56.25vw; /* This maintains a 16:9 cinematic aspect ratio constraint */
+    height: 56.25vw;
     min-height: 100vh;
-    min-width: 177.77vh; /* 16/9 aspect ratio fallback */
+    min-width: 177.77vh; 
     transform: translate(-50%, -50%);
-    pointer-events: none; /* Prevents users from accidentally pausing the background */
+    pointer-events: none; 
+    object-fit: cover; /* Ensures the image fills the space correctly */
+}
+
+/* Keep the fade-in strictly on the iframe */
+.hero-video-container iframe {
+    opacity: 0; 
+    transition: opacity 0.4s ease; 
 }
 
 .hero-content {
@@ -518,16 +520,18 @@ footer {
         mask-image: radial-gradient(white, black);
     }
 
-    /* Completely resets ALL desktop sizing so the video fits perfectly inside the card */
-    .hero-video-container iframe {
+    /* Resets both the image and the video so they fit perfectly in the mobile card */
+    .hero-video-container iframe,
+    .hero-video-container .fallback-img {
         position: absolute !important;
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        min-width: 0 !important;  /* THIS FIXES THE BUG: Overrides the massive desktop width */
-        min-height: 0 !important; /* THIS FIXES THE BUG: Overrides the massive desktop height */
+        min-width: 0 !important;  
+        min-height: 0 !important; 
         transform: none !important; 
+        object-fit: cover !important;
     }
 
     .hero-title-bottom {
